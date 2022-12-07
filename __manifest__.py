@@ -13,6 +13,7 @@
     'auto_install': False,
     'data': [
         # 'security/ir.model.access.csv',
-        'data/fetch_products.xml'
+        'data/fetch_products.xml',
+        'views/views.xml',
     ]
 }
