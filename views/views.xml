@@ -14,7 +14,17 @@
                 <label string="x-Gateway-APIKey" for="x_gateway_apikey"></label>
                 <div class="text-muted">Entrer votre clef d'API midocean</div>
                 <div class="mt16">
-                  <field name="x_gateway_apikey" required="1"></field>
+                  <field name="x_gateway_apikey"></field>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 o_setting_box" id="products_price_factor">
+              <div class="o_setting_right_pane">
+                <label string="Coefficient de multiplication des prix" for="products_price_factor"></label>
+                <div class="text-muted">Coefficient de multiplication des prix</div>
+                <div class="mt16">
+                  <field name="products_price_factor"></field>
                 </div>
               </div>
             </div>

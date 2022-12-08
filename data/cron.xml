@@ -1,0 +1,28 @@
+<odoo>
+    <!-- noupdate="1" -->
+    <data>
+        <record id="ir_cron_fetch_product_from_midocean" model="ir.cron">
+            <field name="name">Fetch Products from midocean</field>
+            <field name="model_id" ref="model_product_template" />
+            <field name="state">code</field>
+            <field name="code">model.fetch_product_from_midocean()</field>
+            <field name="active" eval="False" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <record id="ir_cron_fetch_product__price_from_midocean" model="ir.cron">
+            <field name="name">Fetch Products Prices from midocean</field>
+            <field name="model_id" ref="model_product_template" />
+            <field name="state">code</field>
+            <field name="code">model.fetch_product_price_from_midocean()</field>
+            <field name="active" eval="False" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">10</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+        </record>
+    </data>
+</odoo>
