@@ -16,4 +16,4 @@ class ResCompany(models.Model):
     x_gateway_apikey = fields.Char(string='x-Gateway-APIKey')
 
     products_price_factor = fields.Float(
-        string='Coefficient de multiplication des prix')
+        string='Coefficient de multiplication des prix', default=1.0)

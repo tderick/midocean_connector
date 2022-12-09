@@ -17,3 +17,4 @@
         'views/views.xml',
     ]
 }
+
