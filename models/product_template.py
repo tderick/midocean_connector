@@ -414,6 +414,18 @@ class ProductTemplateExtend(models.Model):
                             "standard_price": float(price['price'].replace(',', '.', 1))
                         })
 
+                    elif ProductTemplate.search_count([('hidden_reference_code', '=', price['sku'])]) > 1:
+                        products = ProductTemplate.search(
+                            [('hidden_reference_code', '=', price['sku'])])
+
+                        products[0].write({
+                            "standard_price": float(price['price'].replace(',', '.', 1))
+                        })
+
+                        # Delete duplicate product
+                        for i in range(1, len(products)):
+                            products[i].unlink()
+
                     if ProductProduct.search_count([('default_code', '=', price['sku'])]) == 1:
                         product = ProductProduct.search(
                             [('default_code', '=', price['sku'])])
@@ -421,5 +433,16 @@ class ProductTemplateExtend(models.Model):
                         product.write({
                             "standard_price": float(price['price'].replace(',', '.', 1))
                         })
+                    elif ProductProduct.search_count([('default_code', '=', price['sku'])]) > 1:
+                        products = ProductProduct.search(
+                            [('default_code', '=', price['sku'])])
+
+                        products[0].write({
+                            "standard_price": float(price['price'].replace(',', '.', 1))
+                        })
+
+                        # Delete duplicate product
+                        for i in range(1, len(products)):
+                            products[i].unlink()
 
                 self.env.cr.commit()
