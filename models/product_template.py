@@ -6,6 +6,32 @@ from odoo import models, fields, api
 
 _logger = logging.getLogger(__name__)
 
+PRODUCT_DESCRIPTION = """
+{}
+
+General
+Main material: {} 
+Commodity Code: {} 
+Country of Origin: {} 
+
+Dimensions
+Dimensions: {}
+Width: {} {} 
+Length: {} {} 
+Height: {} {} 
+Volume: {} {} 
+Gross Weight: {} {} 
+Net Weight: {} {} 
+
+Packaging
+Carton Height: {} {} 
+Carton Width: {} {} 
+Carton Length: {} {} 
+Carton Volume: {} {} 
+Carton Gross Weight: {} {} 
+Carton Quantity: {} pieces 
+"""
+
 
 class ProductTemplateExtend(models.Model):
     _inherit = "product.template"
@@ -59,19 +85,96 @@ class ProductTemplateExtend(models.Model):
                 # Itterate on the product on this batch
                 for product in products:
 
+                    product_template = None
+
                     try:
                         # Test if the product already exists
                         if ProductTemplate.search_count([("name", "=", product['short_description'])]) == 0:
 
+                            # Product Description
+                            description = PRODUCT_DESCRIPTION.format(
+                                product['long_description'] if product.get(
+                                    "long_description") is not None else "",
+                                product['material'] if product.get(
+                                    "material") is not None else "",
+                                product['commodity_code'] if product.get(
+                                    "commodity_code") is not None else "",
+                                product['country_of_origin'] if product.get(
+                                    "country_of_origin") is not None else "",
+                                product['dimensions'] if product.get(
+                                    "dimensions") is not None else "",
+                                product['width'] if product.get(
+                                    "width") is not None else "",
+                                product['width_unit'] if product.get(
+                                    "width_unit") is not None else "",
+                                product['length'] if product.get(
+                                    "length") is not None else "",
+                                product['length_unit'] if product.get(
+                                    "length_unit") is not None else "",
+                                product['height'] if product.get(
+                                    "height") is not None else "",
+                                product['height_unit'] if product.get(
+                                    "height_unit") is not None else "",
+                                product['volume'] if product.get(
+                                    "volume") is not None else "",
+                                product['volume_unit'] if product.get(
+                                    "volume_unit") is not None else "",
+                                product['gross_weight'] if product.get(
+                                    "gross_weight") is not None else "",
+                                product['gross_weight_unit'] if product.get(
+                                    "gross_weight_unit") is not None else "",
+                                product['net_weight'] if product.get(
+                                    "net_weight") is not None else "",
+                                product['net_weight_unit'] if product.get(
+                                    "net_weight_unit") is not None else "",
+                                product['carton_height'] if product.get(
+                                    "carton_height") is not None else "",
+                                product['carton_height_unit'] if product.get(
+                                    "carton_height_unit") is not None else "",
+                                product['carton_width'] if product.get(
+                                    "carton_width") is not None else "",
+                                product['carton_width_unit'] if product.get(
+                                    "carton_width_unit") is not None else "",
+                                product['carton_length'] if product.get(
+                                    "carton_length") is not None else "",
+                                product['carton_length_unit'] if product.get(
+                                    "carton_length_unit") is not None else "",
+                                product['carton_volume'] if product.get(
+                                    "carton_width") is not None else "",
+                                product['carton_volume_unit'] if product.get(
+                                    "carton_volume_unit") is not None else "",
+                                product['carton_gross_weight'] if product.get(
+                                    "carton_gross_weight") is not None else "",
+                                product['carton_gross_weight_unit'] if product.get(
+                                    "carton_gross_weight_unit") is not None else "",
+                                product['outer_carton_quantity'] if product.get(
+                                    "outer_carton_quantity") is not None else "",
+                            )
+
                             # Create product template
                             product_template = ProductTemplate.create({
                                 "name": product['short_description'],
-                                "description": product['long_description'] if product.get("long_description") is not None else "",
+                                "description": description,
                                 "weight": product['net_weight'],
                                 "volume": product['volume'],
                                 "type": "product",
                                 "default_code": product['master_code']
                             })
+
+                            # Adding digital assets
+                            if (len(product['digital_assets']) >= 1):
+                                Attachement = self.env['ir.attachment']
+                                for asset in product['digital_assets']:
+                                    attachment = base64.b64encode(
+                                        requests.get(asset['url']).content)
+                                    Attachement.create({
+                                        "name": asset['subtype'],
+                                        "type": "binary",
+                                        "datas": attachment,
+                                        "res_id": product_template.id,
+                                        "mimetype": "application/pdf",
+                                        "res_model": "product.template",
+                                    })
 
                             category_level1 = None
                             category_level2 = None
@@ -261,8 +364,7 @@ class ProductTemplateExtend(models.Model):
                                                 "image_1024": image_variant_1024,
                                             })
                     except:
-                        pass
-                        # self.env.cr.rollback()
+                        product_template.unlink()
 
                 # Commit the product process in this batch
                 self.env.cr.commit()

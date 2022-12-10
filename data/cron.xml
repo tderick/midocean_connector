@@ -8,8 +8,9 @@
             <field name="code">model.fetch_product_from_midocean()</field>
             <field name="active" eval="True" />
             <field name="user_id" ref="base.user_root" />
-            <field name="interval_number">6</field>
-            <field name="interval_type">hours</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
         </record>
 
@@ -18,10 +19,11 @@
             <field name="model_id" ref="model_product_template" />
             <field name="state">code</field>
             <field name="code">model.fetch_product_price_from_midocean()</field>
-            <field name="active" eval="False" />
+            <field name="active" eval="True" />
             <field name="user_id" ref="base.user_root" />
-            <field name="interval_number">7</field>
-            <field name="interval_type">hours</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
         </record>
     </data>
