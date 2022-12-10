@@ -13,6 +13,10 @@ General
 Main material: {} 
 Commodity Code: {} 
 Country of Origin: {} 
+Brand: {}
+Product name: {}
+Category code: {}
+Product class: {}
 
 Dimensions
 Dimensions: {}
@@ -101,6 +105,14 @@ class ProductTemplateExtend(models.Model):
                                     "commodity_code") is not None else "",
                                 product['country_of_origin'] if product.get(
                                     "country_of_origin") is not None else "",
+                                product['brand'] if product.get(
+                                    "brand") is not None else "",
+                                product['product_name'] if product.get(
+                                    "product_name") is not None else "",
+                                product['category_code'] if product.get(
+                                    "category_code") is not None else "",
+                                product['product_class'] if product.get(
+                                    "product_class") is not None else "",
                                 product['dimensions'] if product.get(
                                     "dimensions") is not None else "",
                                 product['width'] if product.get(
@@ -161,7 +173,7 @@ class ProductTemplateExtend(models.Model):
                                 "default_code": product['master_code']
                             })
 
-                            # Adding digital assets
+                            # Adding digital assets like attachement to product template
                             if (len(product['digital_assets']) >= 1):
                                 Attachement = self.env['ir.attachment']
                                 for asset in product['digital_assets']:
