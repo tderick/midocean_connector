@@ -446,3 +446,12 @@ class ProductTemplateExtend(models.Model):
                             products[i].unlink()
 
                 self.env.cr.commit()
+
+    def delete_wrong_products(self):
+        products = self.env['product.template'].search(
+            [("default_code", "=", False)])
+
+        if len(products) >= 1:
+            for product in products:
+                if len(product.attribute_line_ids) > 0 and product.product_variant_count == 0:
+                    product.unlink()
